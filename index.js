@@ -58,9 +58,9 @@ module.exports.pitch = function (remainingRequest) {
   this.cacheable && this.cacheable();
   if (!this.query || !this.query.namespace || !this.query.modules) throw new Error("query parameter is missing");
   // Determine how to resolve the global object
+  let request = this._module.rawRequest.split('!');
   request = request[request.length - 1].replace(/^@/i, '').replace(/\//g, '.');
   const globalVar = `${this.query.namespace.replace(/^\?/i, '')}.${request}`;
-  
   this._module.userRequest = this._module.userRequest + '-shared';
   return accesorString(globalVar) + " = " +
     "Object.assign(" + propertyString(globalVar) + " || {}, require(" + JSON.stringify("-!" + newRequestPath) + "));";
